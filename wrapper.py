@@ -3,6 +3,7 @@ import pandas as pd
 import sklearn
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from lazypredict.Supervised import LazyClassifier
 
 from typing import List, Literal
 
@@ -49,3 +50,13 @@ def process_data(data_path: str,
     X_test = sc.transform(X_test)
 
     return sc, X_train, X_test, y_train, y_test
+
+def lazy_feature_selection(data_path: str,
+                            list_column: List[str],
+                            fill_na: Literal[0, "median", "mean"],
+                            scaler: Literal["standard", "minmax"]):
+    sc, X_train, X_test, y_train, y_test = process_data(data_path, list_column, fill_na, scaler)
+    clf = LazyClassifier(verbose=0, ignore_warnings=True, custom_metric=None)
+    score, predictions = clf.fit(X_train, X_test, y_train, y_test)
+    
+    return score
