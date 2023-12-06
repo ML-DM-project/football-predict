@@ -22,8 +22,8 @@ def process_data(data_path: str,
                  scaler: Literal["standard", "minmax", "maxabs", "normal", "power", "robust", "quantile"] = "standard"):
     df = pd.read_csv(data_path, usecols=list_column)
 
-    y1 = df.iloc[:, -3]   # homeScoreCurrent
-    y2 = df.iloc[:, -1]   # awayScoreCurrent
+    y1 = df["homeScoreCurrent"]   # homeScoreCurrent
+    y2 = df["awayScoreCurrent"]   # awayScoreCurrent
     y = pd.concat([y1, y2], axis=1)
 
     conditions = [
@@ -34,7 +34,8 @@ def process_data(data_path: str,
     values = ["Lose", "Draw", "Win"]
     y = pd.DataFrame(np.select(conditions, values))
 
-    X = df.drop(["id", "awayScoreCurrent", "homeScoreCurrent"], axis=1)
+    thisFilter = df.filter(["id", "awayScoreCurrent", "homeScoreCurrent"])
+    X = df.drop(thisFilter, axis=1)
 
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.15, random_state=42)
