@@ -18,7 +18,7 @@ from typing import List, Literal
 
 def process_data(data_path: str,
                  list_column: List[str],
-                 fill_na: Literal[0, "median", "mean"] = 0,
+                 fill_na: Literal[0, "median", "mean", "auto"] = "auto",
                  scaler: Literal["standard", "minmax", "maxabs", "normal", "power", "robust", "quantile"] = "standard"):
     df = pd.read_csv(data_path, usecols=list_column)
 
@@ -49,6 +49,21 @@ def process_data(data_path: str,
     elif fill_na == "mean":
         X_train.fillna(X_train.mean(), inplace=True)
         X_test.fillna(X_test.mean(), inplace=True)
+    elif fill_na == "auto":   # fill based on feature engineering
+        X_train['homeAvgRating'] = X_train['homeAvgRating'].fillna(X_train['homeAvgRating'].mean())
+        X_train['homePoint'] = X_train['homePoint'].fillna(X_train['homePoint'].median())
+        X_train['homeForm'] = X_train['homeForm'].fillna(X_train['homeForm'].mean())
+        X_train['awayAvgRating'] = X_train['awayAvgRating'].fillna(X_train['awayAvgRating'].mean())
+        X_train['awayPoint'] = X_train['awayPoint'].fillna(X_train['awayPoint'].median())
+        X_train['awayForm'] = X_train['awayForm'].fillna(X_train['awayForm'].mean())
+        
+        X_test['homeAvgRating'] = X_test['homeAvgRating'].fillna(X_test['homeAvgRating'].mean())
+        X_test['homePoint'] = X_test['homePoint'].fillna(X_test['homePoint'].median())
+        X_test['homeForm'] = X_test['homeForm'].fillna(X_test['homeForm'].mean())
+        X_test['awayAvgRating'] = X_test['awayAvgRating'].fillna(X_test['awayAvgRating'].mean())
+        X_test['awayPoint'] = X_test['awayPoint'].fillna(X_test['awayPoint'].median())
+        X_test['awayForm'] = X_test['awayForm'].fillna(X_test['awayForm'].mean())
+        
 
     if scaler == "standard":
         sc = StandardScaler()
@@ -74,8 +89,8 @@ def process_data(data_path: str,
 
 def lazy_feature_selection(data_path: str,
                             list_column: List[str],
-                            fill_na: Literal[0, "median", "mean"],
-                            scaler: Literal["standard", "minmax"]):
+                            fill_na: Literal[0, "median", "mean", "auto"] = "auto",
+                           scaler: Literal["standard", "minmax", "maxabs", "normal", "power", "robust", "quantile"] = "standard"):
     sc, X_train, X_test, y_train, y_test = process_data(data_path, list_column, fill_na, scaler)
     clf = LazyClassifier(verbose=0, ignore_warnings=True, custom_metric=None)
     score, predictions = clf.fit(X_train, X_test, y_train, y_test)
