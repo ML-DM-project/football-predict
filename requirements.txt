@@ -4,3 +4,5 @@ scikit-learn
 lazypredict
 matplotlib
 seaborn
+feature_engine
+mlxtend
