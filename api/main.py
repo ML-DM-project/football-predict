@@ -72,12 +72,24 @@ async def predict(match_id: str):
         return {"success": 0, "message": "Can't get data from Sofascore API"}
     
     h2h = json.loads(res.content)
-    previousHomeWin = h2h.get("teamDuel", dict()).get("homeWins", 0)
-    previousAwayWin = h2h.get("teamDuel", dict()).get("awayWins", 0)
-    previousDraw = h2h.get("teamDuel", dict()).get("draws", 0)
-    previousManagerHomeWin = h2h.get("managerDuel", dict()).get("homeWins", 0)
-    previousManagerAwayWin = h2h.get("managerDuel", dict()).get("awayWins", 0)
-    previousManagerDraw = h2h.get("managerDuel", dict()).get("draws", 0)
+
+    if h2h.get("teamDuel", None):
+        previousHomeWin = h2h.get("teamDuel", dict()).get("homeWins", 0)
+        previousAwayWin = h2h.get("teamDuel", dict()).get("awayWins", 0)
+        previousDraw = h2h.get("teamDuel", dict()).get("draws", 0)
+    else: 
+        previousHomeWin = 0
+        previousAwayWin = 0
+        previousDraw = 0
+    
+    if h2h.get("managerDuel", None):
+        previousManagerHomeWin = h2h.get("managerDuel", dict()).get("homeWins", 0)
+        previousManagerAwayWin = h2h.get("managerDuel", dict()).get("awayWins", 0)
+        previousManagerDraw = h2h.get("managerDuel", dict()).get("draws", 0)
+    else:
+        previousManagerHomeWin = 0
+        previousManagerAwayWin = 0
+        previousManagerDraw = 0
     
     # get pregame form
     res = requests.get(f'https://api.sofascore.com/api/v1/event/{match_id}/pregame-form', headers=models["headers"])
