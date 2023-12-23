@@ -2,6 +2,7 @@ import os
 
 from typing import Union, List
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 import pandas as pd
@@ -31,6 +32,16 @@ async def lifespan(app: FastAPI):
     models.clear()
     
 app = FastAPI(lifespan=lifespan)
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/predict")
 async def predict(match_id: str):
