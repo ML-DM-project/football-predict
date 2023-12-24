@@ -41,4 +41,14 @@ We only predict the ratio of win/draw/lose, not the exact goal scored by each te
 - The match_id value is the match id of Sofascore, directly in the match url. For instance, the url of the match between Liverpool and Arsenal in 00:30 24/12/2023: https://www.sofascore.com/liverpool-arsenal/HQfh#id:11352520 => the match_id is 11352520
 - Example inference (on Postman):
     - Send request:
+
+       ![image](https://github.com/ML-DM-project/football-predict/assets/77562200/272da5f6-a236-4737-b30e-d16bf19f1948)
+
     - Get result:
+
+       ![image](https://github.com/ML-DM-project/football-predict/assets/77562200/0a5dce37-71f8-435a-be38-8b88821ae3f2)
+ 
+    - The result contains the winning chance of home team (in this case is Liverpool), winning chance of away team (in this case is Arsenal), and draw chance.
+ 
+  # 4. Issue
+  - If there is any problem with our model and api, please post it in the Issue tab in this repository
