@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 import pandas as pd
-import pickle, joblib
+import pickle
 from sklearn.pipeline import Pipeline
 import datetime
 from zoneinfo import ZoneInfo
@@ -15,11 +15,13 @@ import json
 
 from utils import *
 
+pipeline_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "pipeline.pkl")
+
 models = {}
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    models["pipeline"] = pickle.load(open("pipeline.pkl", "rb"))
+    models["pipeline"] = pickle.load(open(pipeline_path, "rb"))
     models["homeAvgRating"] = 6.88
     models["homePoint"] = 17.0
     models["homeForm"] = 1.37

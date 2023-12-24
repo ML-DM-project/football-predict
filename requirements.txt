@@ -6,3 +6,5 @@ matplotlib
 seaborn
 feature_engine
 mlxtend
+fastapi
+pickle
