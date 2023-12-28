@@ -52,22 +52,22 @@ def process_data(data_path: str,
     elif fill_na == "auto": # fill based on feature engineering
         if 'homeAvgRating' in list_column:
             X_train['homeAvgRating'] = X_train['homeAvgRating'].fillna(X_train['homeAvgRating'].mean())
-            X_test['homeAvgRating'] = X_test['homeAvgRating'].fillna(X_test['homeAvgRating'].mean())
+            X_test['homeAvgRating'] = X_test['homeAvgRating'].fillna(X_train['homeAvgRating'].mean())
         if 'homePoint' in list_column:
             X_train['homePoint'] = X_train['homePoint'].fillna(X_train['homePoint'].median())
-            X_test['homePoint'] = X_test['homePoint'].fillna(X_test['homePoint'].median())
+            X_test['homePoint'] = X_test['homePoint'].fillna(X_train['homePoint'].median())
         if 'homeForm' in list_column:
             X_train['homeForm'] = X_train['homeForm'].fillna(X_train['homeForm'].mean())
-            X_test['homeForm'] = X_test['homeForm'].fillna(X_test['homeForm'].mean())
+            X_test['homeForm'] = X_test['homeForm'].fillna(X_train['homeForm'].mean())
         if 'awayAvgRating' in list_column:
             X_train['awayAvgRating'] = X_train['awayAvgRating'].fillna(X_train['awayAvgRating'].mean())
-            X_test['awayAvgRating'] = X_test['awayAvgRating'].fillna(X_test['awayAvgRating'].mean())
+            X_test['awayAvgRating'] = X_test['awayAvgRating'].fillna(X_train['awayAvgRating'].mean())
         if 'awayPoint' in list_column:
             X_train['awayPoint'] = X_train['awayPoint'].fillna(X_train['awayPoint'].median())
-            X_test['awayPoint'] = X_test['awayPoint'].fillna(X_test['awayPoint'].median())
+            X_test['awayPoint'] = X_test['awayPoint'].fillna(X_train['awayPoint'].median())
         if 'awayForm' in list_column:
             X_train['awayForm'] = X_train['awayForm'].fillna(X_train['awayForm'].mean())
-            X_test['awayForm'] = X_test['awayForm'].fillna(X_test['awayForm'].mean())
+            X_test['awayForm'] = X_test['awayForm'].fillna(X_train['awayForm'].mean())
         
 
     if scaler == "standard":
@@ -128,3 +128,82 @@ def lazy_train(X_train, X_test, y_train, y_test,
     score, predictions = clf.fit(X_train, X_test, y_train, y_test)
     
     return score
+
+list_column = ['previousHomeWin', 'previousAwayWin', 'previousDraw',
+       'previousManagerHomeWin', 'previousManagerAwayWin',
+       'previousManagerDraw', 'homeAvgRating', 'homePosition', 'homePoint',
+       'homeForm', 'awayAvgRating', 'awayPosition', 'awayPoint', 'awayForm',
+       'homeExpectedGoal', 'awayExpectedGoal', 'homeExpectedAssist',
+       'awayExpectedAssist', 'homeBallPosession', 'homeShotOnTarget',
+       'awayShotOnTarget', 'homeShotOffTarget', 'awayShotOffTarget',
+       'homeBlockedShot', 'awayBlockedShot', 'homeCorner', 'awayCorner',
+       'homeOffside', 'awayOffside', 'homeYellowCard', 'awayYellowCard',
+       'homeRedCard', 'awayRedCard', 'homeFreekick', 'awayFreekick',
+       'homeThrowIn', 'awayThrowIn', 'homeGoalkick', 'awayGoalkick',
+       'homeBigChance', 'awayBigChance', 'homeBigChanceMissed',
+       'awayBigChanceMissed', 'homeHitWoodwork', 'awayHitWoodwork',
+       'homeCounterAttack', 'awayCounterAttack', 'homeCounterAttackShot',
+       'awayCounterAttackShot', 'homeCounterAttackGoal',
+       'awayCounterAttackGoal', 'homeShotInsideBox', 'awayShotInsideBox',
+       'homeGoalSave', 'awayGoalSave', 'homePass', 'awayPass',
+       'homeAccuratePass', 'awayAccuratePass', 'homeLongPass', 'awayLongPass',
+       'homeAccurateLongPass', 'awayAccurateLongPass', 'homeCross',
+       'awayCross', 'homeAccurateCross', 'awayAccurateCross', 'homeDribble',
+       'awwayDribble', 'homeSuccessfulDribble', 'awaySuccessfulDribble',
+       'homePossesionLost', 'awayPossesionLost', 'homeDuelWon', 'awayDuelWon',
+       'homeAerialWon', 'awayAerialWon', 'homeTackle', 'awayTackle',
+       'homeInterception', 'awayInterception', 'homeClearance',
+       'awayClearance', 'homeTeamId', 'awayTeamId', 'homeScorePeriod1',
+       'homeScoreCurrent', 'awayScorePeriod1', 'awayScoreCurrent']
+
+def load_fillna(data_path: str = "match_all_statistic.csv", list_column: List[str] = list_column, seed=42):
+    df = pd.read_csv(data_path, usecols=list_column)
+    
+    # Get label
+    y1 = df["homeScoreCurrent"]   # homeScoreCurrent
+    y2 = df["awayScoreCurrent"]   # awayScoreCurrent
+    y = pd.concat([y1, y2], axis=1)
+
+    conditions = [
+        (y['homeScoreCurrent'] < y['awayScoreCurrent']),
+        (y['homeScoreCurrent'] == y['awayScoreCurrent']),
+        (y['homeScoreCurrent'] > y['awayScoreCurrent'])
+    ]
+    values = [0, 1, 3]
+    y = pd.DataFrame(np.select(conditions, values))
+
+    thisFilter = df.filter(["id", "awayScoreCurrent", "homeScoreCurrent"])
+    X = df.drop(thisFilter, axis=1)
+    
+    # Train-test split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, random_state=seed, stratify=y)
+    
+    X_train['homeAvgRating'] = X_train['homeAvgRating'].fillna(X_train['homeAvgRating'].mean())
+    X_test['homeAvgRating'] = X_test['homeAvgRating'].fillna(X_train['homeAvgRating'].mean())
+
+    X_train['homePoint'] = X_train['homePoint'].fillna(X_train['homePoint'].median())
+    X_test['homePoint'] = X_test['homePoint'].fillna(X_train['homePoint'].median())
+
+    X_train['homeForm'] = X_train['homeForm'].fillna(X_train['homeForm'].mean())
+    X_test['homeForm'] = X_test['homeForm'].fillna(X_train['homeForm'].mean())
+
+    X_train['awayAvgRating'] = X_train['awayAvgRating'].fillna(X_train['awayAvgRating'].mean())
+    X_test['awayAvgRating'] = X_test['awayAvgRating'].fillna(X_train['awayAvgRating'].mean())
+
+    X_train['awayPoint'] = X_train['awayPoint'].fillna(X_train['awayPoint'].median())
+    X_test['awayPoint'] = X_test['awayPoint'].fillna(X_train['awayPoint'].median())
+
+    X_train['awayForm'] = X_train['awayForm'].fillna(X_train['awayForm'].mean())
+    X_test['awayForm'] = X_test['awayForm'].fillna(X_train['awayForm'].mean())
+    
+    # Deal with xG and xA
+    X_train['homeExpectedGoal'] = X_train['homeExpectedGoal'].replace(0, X_train['homeExpectedGoal'].median())
+    X_test['homeExpectedGoal'] = X_test['homeExpectedGoal'].replace(0, X_train['homeExpectedGoal'].median())
+
+    X_train['awayExpectedGoal'] = X_train['awayExpectedGoal'].replace(0, X_train['awayExpectedGoal'].median())
+    X_test['awayExpectedGoal'] = X_test['awayExpectedGoal'].replace(0, X_train['awayExpectedGoal'].median())
+    
+    X_train.drop(["homeExpectedAssist", "awayExpectedAssist"], axis=1, inplace=True)
+    X_test.drop(["homeExpectedAssist", "awayExpectedAssist"], axis=1, inplace=True)
+    
+    return X_train, X_test, y_train, y_test
