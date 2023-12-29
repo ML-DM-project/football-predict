@@ -15,7 +15,7 @@ import json
 
 from utils import *
 
-pipeline_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "pipeline.pkl")
+pipeline_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "pipeline1.pkl")
 
 models = {}
 
@@ -23,11 +23,11 @@ models = {}
 async def lifespan(app: FastAPI):
     models["pipeline"] = pickle.load(open(pipeline_path, "rb"))
     models["homeAvgRating"] = 6.88
-    models["homePoint"] = 17.0
-    models["homeForm"] = 1.37
-    models["awayAvgRating"] = 6.89
-    models["awayPoint"] = 17.0
-    models["awayForm"] = 1.43
+    models["homePoint"] = 18.0
+    models["homeForm"] = 1.36
+    models["awayAvgRating"] = 6.88
+    models["awayPoint"] = 18.0
+    models["awayForm"] = 1.42
     
     models["headers"] = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
     yield 
@@ -160,8 +160,6 @@ async def predict(match_id: str):
     data_result = [homeTeamId, awayTeamId, homeScorePeriod1, awayScorePeriod1]
     
     data = data_h2h + data_pregame_form + data_statistic + data_result
-    print(len(data))
-    print(len(list_column))
     
     input = pd.DataFrame(columns=list_column)
     input.loc[len(input)] = data
