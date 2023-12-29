@@ -4549,3 +4549,40 @@ Result of ExtraTreesClassifier(random_state=42):
 Best accuracy: 0.8428646934460888, best hyperparameter: {'max_depth': None, 'n_estimators': 50}
 Accuracy on test set: 0.7948717948717948
 
+Load all features completed. Start tuning hyperparameters:
+Result of LogisticRegression(random_state=42):
+Best accuracy: 0.7765327695560253, best hyperparameter: {'C': 0.2, 'max_iter': 50}
+Accuracy on test set: 0.7948717948717948
+
+Result of RidgeClassifier(random_state=42):
+Best accuracy: 0.7743657505285413, best hyperparameter: {'alpha': 50, 'max_iter': None}
+Accuracy on test set: 0.782051282051282
+
+Result of DecisionTreeClassifier(random_state=42):
+Best accuracy: 0.7100951374207187, best hyperparameter: {'class_weight': None, 'max_depth': None}
+Accuracy on test set: 0.6282051282051282
+
+Result of KNeighborsClassifier():
+Best accuracy: 0.6300739957716702, best hyperparameter: {'n_neighbors': 9, 'weights': 'uniform'}
+Accuracy on test set: 0.6153846153846154
+
+Result of LinearDiscriminantAnalysis():
+Best accuracy: 0.7584038054968286, best hyperparameter: {'solver': 'svd'}
+Accuracy on test set: 0.782051282051282
+
+Result of SVC(random_state=42):
+Best accuracy: 0.7719344608879493, best hyperparameter: {'C': 0.1, 'kernel': 'linear'}
+Accuracy on test set: 0.7564102564102564
+
+Result of AdaBoostClassifier(random_state=42):
+Best accuracy: 0.7673890063424947, best hyperparameter: {'estimator': LogisticRegression(), 'n_estimators': 10}
+Accuracy on test set: 0.7564102564102564
+
+Result of RandomForestClassifier(random_state=42):
+Best accuracy: 0.7351479915433403, best hyperparameter: {'max_depth': 10, 'n_estimators': 80}
+Accuracy on test set: 0.6923076923076923
+
+Result of ExtraTreesClassifier(random_state=42):
+Best accuracy: 0.7624735729386892, best hyperparameter: {'max_depth': None, 'n_estimators': 100}
+Accuracy on test set: 0.7564102564102564
+

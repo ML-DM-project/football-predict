@@ -4549,3 +4549,40 @@ Result of ExtraTreesClassifier
 Average best accuracy: 0.8132980972515856, std: 0.023513624786950908, best hyperparameter: {'max_depth': 10, 'n_estimators': 30}, {'max_depth': None, 'n_estimators': 50}, {'max_depth': None, 'n_estimators': 100}, {'max_depth': 5, 'n_estimators': 80}, {'max_depth': 10, 'n_estimators': 50}
 Accuracy on test set: 0.7589743589743589, std: 0.06946778043150802
 
+Load all features completed. Start tuning hyperparameters:
+Result of LogisticRegression
+Average best accuracy: 0.7689323467230443, std: 0.006189702950742935, best hyperparameter: {'C': 0.05, 'max_iter': 50}, {'C': 0.2, 'max_iter': 50}, {'C': 0.1, 'max_iter': 50}, {'C': 0.1, 'max_iter': 50}, {'C': 0.05, 'max_iter': 50}
+Accuracy on test set: 0.7897435897435898, std: 0.030982169163063004
+
+Result of RidgeClassifier
+Average best accuracy: 0.7776427061310782, std: 0.006017297362940449, best hyperparameter: {'alpha': 50, 'max_iter': None}, {'alpha': 50, 'max_iter': None}, {'alpha': 50, 'max_iter': None}, {'alpha': 100, 'max_iter': None}, {'alpha': 5, 'max_iter': None}
+Accuracy on test set: 0.7820512820512822, std: 0.03803178711331108
+
+Result of DecisionTreeClassifier
+Average best accuracy: 0.7233086680761098, std: 0.012720747696984277, best hyperparameter: {'class_weight': 'balanced', 'max_depth': 10}, {'class_weight': None, 'max_depth': None}, {'class_weight': None, 'max_depth': 5}, {'class_weight': 'balanced', 'max_depth': 5}, {'class_weight': 'balanced', 'max_depth': 5}
+Accuracy on test set: 0.6615384615384615, std: 0.05292248061679563
+
+Result of KNeighborsClassifier
+Average best accuracy: 0.6309619450317125, std: 0.0065052582722920655, best hyperparameter: {'n_neighbors': 7, 'weights': 'uniform'}, {'n_neighbors': 9, 'weights': 'uniform'}, {'n_neighbors': 7, 'weights': 'uniform'}, {'n_neighbors': 7, 'weights': 'distance'}, {'n_neighbors': 9, 'weights': 'distance'}
+Accuracy on test set: 0.6076923076923078, std: 0.017390589700321223
+
+Result of LinearDiscriminantAnalysis
+Average best accuracy: 0.7589640591966174, std: 0.011198420378830154, best hyperparameter: {'solver': 'svd'}, {'solver': 'svd'}, {'solver': 'svd'}, {'solver': 'svd'}, {'solver': 'svd'}
+Accuracy on test set: 0.7512820512820513, std: 0.04102564102564102
+
+Result of SVC
+Average best accuracy: 0.755274841437632, std: 0.009243120743377733, best hyperparameter: {'C': 0.1, 'kernel': 'linear'}, {'C': 0.1, 'kernel': 'linear'}, {'C': 0.05, 'kernel': 'linear'}, {'C': 0.1, 'kernel': 'linear'}, {'C': 0.05, 'kernel': 'linear'}
+Accuracy on test set: 0.7435897435897436, std: 0.04134491152973615
+
+Result of AdaBoostClassifier
+Average best accuracy: 0.7625581395348837, std: 0.007304325011413677, best hyperparameter: {'estimator': LogisticRegression(), 'n_estimators': 10}, {'estimator': LogisticRegression(), 'n_estimators': 10}, {'estimator': None, 'n_estimators': 80}, {'estimator': None, 'n_estimators': 10}, {'estimator': None, 'n_estimators': 10}
+Accuracy on test set: 0.7589743589743589, std: 0.01700833225823284
+
+Result of RandomForestClassifier
+Average best accuracy: 0.7547251585623679, std: 0.019392453455005693, best hyperparameter: {'max_depth': None, 'n_estimators': 80}, {'max_depth': 10, 'n_estimators': 80}, {'max_depth': 10, 'n_estimators': 80}, {'max_depth': 5, 'n_estimators': 100}, {'max_depth': None, 'n_estimators': 80}
+Accuracy on test set: 0.7461538461538461, std: 0.04166173540838952
+
+Result of ExtraTreesClassifier
+Average best accuracy: 0.7564799154334038, std: 0.006994308085628019, best hyperparameter: {'max_depth': 10, 'n_estimators': 80}, {'max_depth': None, 'n_estimators': 100}, {'max_depth': 10, 'n_estimators': 100}, {'max_depth': 10, 'n_estimators': 80}, {'max_depth': 10, 'n_estimators': 100}
+Accuracy on test set: 0.7743589743589744, std: 0.03768445758127968
+

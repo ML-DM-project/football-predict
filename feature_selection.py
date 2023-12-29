@@ -39,10 +39,13 @@ def scale(X_train, X_test):
     return X_train_scaler, X_test_scaler
 
 class ModelSelector():
-    def __init__(self, seed=42, kfold=10, outfile="result.txt"):
+    def __init__(self, seed=42, kfold=10, outfile=None):
         self.seed = seed
         self.kfold = kfold
-        self.outfile = outfile
+        if outfile is None:
+            self.outfile = f"result_{seed}.txt"
+        else:
+            self.outfile = outfile
         self.models = [LogisticRegression(random_state=seed), 
                        RidgeClassifier(random_state=seed), 
                        DecisionTreeClassifier(random_state=seed), 
@@ -65,6 +68,16 @@ class ModelSelector():
         self.X_test = None
         self.y_train = None
         self.y_test = None
+        
+    def fit_all(self, data_path="match_all_statistic.csv"):
+        self.X_train, self.X_test, self.y_train, self.y_test = load_fillna(data_path=data_path, seed=self.seed)
+        X_train_scaler, X_test_scaler = scale(self.X_train, self.X_test)
+        
+        with open(self.outfile, "a", encoding="utf-8") as f:
+            f.write(f"Load all features completed. Start tuning hyperparameters:\n")
+        self.tuning(X_train_scaler, X_test_scaler, self.y_train, self.y_test)
+        
+        print(f"Finish!!! Check the result in {self.outfile}\n")       
         
     def fit(self, data_path="match_all_statistic.csv"):
         self.X_train, self.X_test, self.y_train, self.y_test = load_fillna(data_path=data_path, seed=self.seed)
