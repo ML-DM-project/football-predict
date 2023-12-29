@@ -207,3 +207,42 @@ def load_fillna(data_path: str = "match_all_statistic.csv", list_column: List[st
     X_test.drop(["homeExpectedAssist", "awayExpectedAssist"], axis=1, inplace=True)
     
     return X_train, X_test, y_train, y_test
+
+def load_fillna_all(data_path: str = "match_all_statistic.csv", list_column: List[str] = list_column):
+    df = pd.read_csv(data_path, usecols=list_column)
+    
+    # Get label
+    y1 = df["homeScoreCurrent"]   # homeScoreCurrent
+    y2 = df["awayScoreCurrent"]   # awayScoreCurrent
+    y = pd.concat([y1, y2], axis=1)
+
+    conditions = [
+        (y['homeScoreCurrent'] < y['awayScoreCurrent']),
+        (y['homeScoreCurrent'] == y['awayScoreCurrent']),
+        (y['homeScoreCurrent'] > y['awayScoreCurrent'])
+    ]
+    values = [0, 1, 3]
+    y = pd.DataFrame(np.select(conditions, values))
+
+    thisFilter = df.filter(["id", "awayScoreCurrent", "homeScoreCurrent"])
+    X = df.drop(thisFilter, axis=1)
+    
+    X['homeAvgRating'] = X['homeAvgRating'].fillna(X['homeAvgRating'].mean())
+
+    X['homePoint'] = X['homePoint'].fillna(X['homePoint'].median())
+
+    X['homeForm'] = X['homeForm'].fillna(X['homeForm'].mean())
+
+    X['awayAvgRating'] = X['awayAvgRating'].fillna(X['awayAvgRating'].mean())
+
+    X['awayPoint'] = X['awayPoint'].fillna(X['awayPoint'].median())
+
+    X['awayForm'] = X['awayForm'].fillna(X['awayForm'].mean())
+    
+    # Deal with xG and xA
+    X['homeExpectedGoal'] = X['homeExpectedGoal'].replace(0, X['homeExpectedGoal'].median())
+    X['awayExpectedGoal'] = X['awayExpectedGoal'].replace(0, X['awayExpectedGoal'].median())
+    
+    X.drop(["homeExpectedAssist", "awayExpectedAssist"], axis=1, inplace=True)
+    
+    return X, y

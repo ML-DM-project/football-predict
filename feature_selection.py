@@ -29,12 +29,6 @@ def scale(X_train, X_test):
 
     X_train_scaler = scaler1.transform(X_train)
     X_test_scaler = scaler1.transform(X_test)
-
-    scaler2 = StandardScaler()
-    scaler2.fit(X_train_scaler)
-
-    X_train_scaler = scaler2.transform(X_train_scaler)
-    X_test_scaler = scaler2.transform(X_test_scaler)
     
     return X_train_scaler, X_test_scaler
 
