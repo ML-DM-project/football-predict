@@ -12,8 +12,8 @@ We only predict the ratio of win/draw/lose, not the exact goal scored by each te
 - Data is splited with the train/test ratio is 0.85/0.15, stratified=True (so the label distributions of train and test datasets are the same)
 
 ## 1.2. Model
-- We use Adaboost model with the default hyperparameters mentioned in [sklearn.ensemble.AdaBoostClassifier](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.AdaBoostClassifier.html)
-- Model Evaluation: the accuracy and balanced accuracy of the model are 0.88 on the train dataset, and 0.85 on the test dataset
+- We use Logistic Regression model with the default hyperparameters mentioned in [sklearn.linear_model.LogisticRegression](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html)
+- Model Evaluation: the 10-folds cross-validation accuracy of the model is 0.8354 
 
 # 2. Feature engineering
 ## 2.1. Libraries
@@ -22,9 +22,14 @@ We only predict the ratio of win/draw/lose, not the exact goal scored by each te
 - lazypredict: to train and evaluation multiple models and compare them
 - Other libraries: numpy, pandas, json, etc.
 ## 2.2. Techniques
-- The initial input has 87 features (89 features - 2 label features), and we remove 8 of them: *homeExpectedAssist*, *awayExpectedAssist*, *homeBallPosession*, *homeCounterAttackShot*, *awayCounterAttackShot*, *homePass*, *awayPass*, *awayAccuratePass*.
-- Scaler: we use QuantileTransformer to reduce the effect of outliers, and StandardScaler to scale the features to same range
-- For another transformation and feature selection techniques, check **all_feature_selection.ipynb** to know the reason of our above assumptions. Make sure to install required libraries by ```pip install -r requirements.txt```
+- Scaler: we use QuantileTransformer to reduce the effect of outliers and transform each feature to uniform distribution 
+- The initial input has 87 features (89 features - 2 label features), and we apply plenty of techniques mentioned in **all_feature_selection.ipynb**. 
+- We use those techniques to tuning hyperparameters with 10-folds cross-validation using GridSearchCV (check **feature_selection.py** for more detail of my implement). We run 5 times with different random seed (0, 42, 100, 1234, 2023) and calculate the mean/std values and put in **result_all.txt**.
+- Using 4 values (mean/std 10-folds acc, mean/std test acc) of each model, we decided to choose:
+   - Model: Logistic Regression
+   - Feature selection: Step Forward Feature Selection (estimator=Logistic Regression, n_features=9)
+- Finally, we tuning Logistic Regression with Step Forward Feature Selection (estimator=Logistic Regression, n_features=9) using all dataset (check out **model_selection.py**)
+- If you want to reproduce our resul, make sure to install required libraries by ```pip install -r requirements.txt```
 # 3. API
 ## 3.1. Prerequisites: 
 - Python >= 3.6
@@ -51,4 +56,4 @@ We only predict the ratio of win/draw/lose, not the exact goal scored by each te
     - The result contains the winning chance of home team (in this case is Liverpool), winning chance of away team (in this case is Arsenal), and draw chance.
  
   # 4. Issue
-  - If there is any problem with our model and api, please post it in the Issue tab in this repository
+  - If there is any problem with our model and api, please post it in the Issue tab in this repository or contact viethuy061002@gmail.com
